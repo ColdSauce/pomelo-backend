@@ -5,12 +5,9 @@ authors = ["Jack Valinsky <jvalinsk@u.rochester.edu>"
           ,"Stefan Aleksic <stefan@stefanaleksic.com>"]
 
 [dependencies]
-rustc-serialize = "0.3.19"
 iron = "0.5.1"
 serde = "0.9.1"
-mount = "0.3.0"
+serde_json = "0.9.9"
+serde_derive = "0.9.11"
 router = "0.5.1"
 
-[dependencies.juniper]
-version = "0.7.0"
-features = ["iron-handlers", "expose-test-schema"]
