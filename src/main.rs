@@ -1,31 +1,18 @@
 extern crate iron;
-extern crate mount;
-#[macro_use] extern crate juniper;
-
-use juniper::iron_handlers::{GraphQLHandler, GraphiQLHandler};
-use juniper::tests::model::Database;
-use juniper::EmptyMutation;
+extern crate router;
 use iron::prelude::*;
+use router::Router;
 use iron::status;
-use mount::Mount;
 
-
-fn context_factory(_: &mut Request) -> Database {
-    Database::new()
+fn index(_: &mut Request) -> IronResult<Response> {
+    Ok(Response::with((status::Ok, "Hello world!"))) 
 }
 
 fn main() {
-    let mut mount = Mount::new();
-    let graphql_endpoint = GraphQLHandler::new(
-        context_factory,
-        Database::new(),
-        EmptyMutation::<Database>::new(),
-    );
-    let graphiql_endpoint = GraphiQLHandler::new("/graphql");
-
-    mount.mount("/", graphiql_endpoint);
-    mount.mount("/graphql", graphql_endpoint);
+    
+    let mut router = Router::new();
+    router.get("/", index, "index");
 
     println!("Hello, world on 3000!");
-    Iron::new(mount).http("localhost:3000").unwrap();
+    Iron::new(router).http("localhost:3000").unwrap();
 }

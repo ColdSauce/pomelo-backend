@@ -9,6 +9,7 @@ rustc-serialize = "0.3.19"
 iron = "0.5.1"
 serde = "0.9.1"
 mount = "0.3.0"
+router = "0.5.1"
 
 [dependencies.juniper]
 version = "0.7.0"
