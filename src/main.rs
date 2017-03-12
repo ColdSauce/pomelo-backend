@@ -15,16 +15,21 @@ use iron::status;
 use staticfile::Static;
 use std::string::String;
 use std::path::Path;
+use std::vec::Vec;
 
 mod models;
 use models::{ClientInput, Category, Categories};
 
-fn categorize(input: ClientInput) -> String {
-    let urls = input.urls;
 
-    // send fake data
-    let cat = Category { name: String::from("tech"), urls: vec![String::from("news.ycombinator.com"), String::from("theverge.com"), String::from("arstechnica.com")] };
-    let result = Categories { results: vec![cat] };
+fn get_categories(links: Vec<String>) -> Vec<Category> {
+    vec![Category { name: String::from("tech"), urls: links }]
+}
+
+fn categorize(input: ClientInput) -> String {
+    let urls = input.urls.into_iter().map(|x| String::from(x)).collect();
+    let cats = get_categories(urls);
+    let result = Categories { results: cats };
+
     serde_json::to_string(&result).unwrap()
 }
 
@@ -43,7 +48,7 @@ fn main() {
     let indexfile = Static::new(Path::new("public/index.html"));
     let images = Static::new(Path::new("public/images"));
 
-    router.get("/", api, "api");
+    router.post("/", api, "api");
 
     mount.mount("/api", router)
          .mount("/images/", images)
